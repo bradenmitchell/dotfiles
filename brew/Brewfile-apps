@@ -1,0 +1,36 @@
+# Brewfile for managing Homebrew cask apps
+
+# Set app dir
+cask_args appdir: '/Applications'
+
+# Taps
+tap 'homebrew/cask'
+
+# Apps
+cask 'adobe-creative-cloud'
+cask 'alfred'
+cask 'appcleaner'
+cask 'bartender'
+cask 'bitwarden'
+cask 'docker'
+cask 'dropbox'
+cask 'google-chrome'
+cask 'mendeley'
+cask 'microsoft-excel'
+cask 'microsoft-outlook'
+cask 'microsoft-powerpoint'
+cask 'microsoft-word'
+cask 'spectacle'
+cask 'the-unarchiver'
+cask 'transmission'
+cask 'visual-studio-code'
+cask 'vlc'
+
+# Mac AppStore Apps
+mas 'Amphetamine', id: 937984704
+mas 'Microsoft Remote Desktop', id: 1295203466
+mas 'Surfshark', id: 1437809329
+mas 'Qantas', id: 1468230799
+
+# Temporarily disabled due to upstream error
+# cask 'jasp'

@@ -1,0 +1,57 @@
+#! /usr/bin/env zsh
+
+
+# Disable configuration wizard on start-up.
+POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true
+
+# Define icon set
+typeset -g POWERLEVEL9K_MODE=nerdfont-complete
+typeset -g POWERLEVEL9K_ICON_PADDING=moderate
+
+typeset -g POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
+typeset -g POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+
+# Define prompt segments.
+typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon context dir vcs)
+typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status node_version)
+
+# Define prompt char via hack (TODO: ? Implement via `prompt_char` var)
+typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=''
+typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX=" %F{006}\uF054%F{073}\uF054%F{109}\uF054%f "
+
+
+##### [ os_icon: os identifier ] #####
+# Set segment text and background colors.
+typeset -g POWERLEVEL9K_OS_ICON_FOREGROUND=7
+typeset -g POWERLEVEL9K_OS_ICON_BACKGROUND=0
+
+
+##### [ context: user@hostname ] #####
+# Set segment text and background colors (default; no privilages, no SSH).
+typeset -g POWERLEVEL9K_CONTEXT_FOREGROUND=7
+typeset -g POWERLEVEL9K_CONTEXT_BACKGROUND=0
+# Define default context format (no privileges, no SSH).
+typeset -g POWERLEVEL9K_CONTEXT_TEMPLATE='%n'
+
+
+##### [ dir: current directory ] #####
+# Set segment text and background colors.
+typeset -g POWERLEVEL9K_DIR_FOREGROUND=0
+typeset -g POWERLEVEL9K_DIR_BACKGROUND=4
+# Set dir icons
+typeset -g POWERLEVEL9K_HOME_ICON=''
+typeset -g POWERLEVEL9K_HOME_SUB_ICON=''
+typeset -g POWERLEVEL9K_FOLDER_ICON=''
+# Define strategy used to truncate dir path.
+typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_start
+typeset -g POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
+# Enable hyperlink for dir path.
+typeset -g POWERLEVEL9K_DIR_HYPERLINK=true
+
+
+##### [ node_version: node.js version ] #####
+# Set segment text and background colors.
+typeset -g POWERLEVEL9K_NODE_VERSION_FOREGROUND=0
+typeset -g POWERLEVEL9K_NODE_VERSION_BACKGROUND=2
+# Show node_version segment only when in a dir tree containing package.json.
+typeset -g POWERLEVEL9K_NODE_VERSION_PROJECT_ONLY=true

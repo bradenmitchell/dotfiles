@@ -1,0 +1,15 @@
+# Brewfile for managing Homebrew cask fonts
+
+# Taps
+tap 'homebrew/cask-fonts'
+
+# Fonts to be installed
+cask 'font-hack-nerd-font'
+cask 'font-lora'
+cask 'font-montserrat'
+cask 'font-open-sans'
+cask 'font-oswald'
+cask 'font-poppins'
+cask 'font-playfair-display'
+cask 'font-raleway'
+cask 'font-roboto'

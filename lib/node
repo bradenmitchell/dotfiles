@@ -1,0 +1,36 @@
+#! /usr/bin/env bash
+
+
+# Install NVM via install script provided on github
+install_nvm() {
+  print_info "" "Installing Node version manager..."
+  /bin/bash -c "$(curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh)" &> /dev/null
+
+  if [[ $? -gt 0 ]]; then
+    print_error "An error occured while installing Node version manager."
+    return 1
+  fi
+  print_success "Node version manager installed successfully."
+}
+
+
+# Install latest LTS node.js (or version specified) via nvm
+install_node() {
+  local node_version="--lts"
+  if [[ $# -gt 0 ]]; then
+    node_version="$1"
+  fi
+
+  local node_version_remote=$(nvm version-remote $node_version)
+
+  print_info "" "Installing node.js $([[ $node_version == "--lts" ]] && echo "LTS ")($node_version_remote) via nvm..."
+
+  nvm install $node_version --latest-npm &> /dev/null
+  if [[ $? -gt 0 ]]; then
+    print_error "An error occured while installing node.js."
+    return 1
+  fi
+  print_success "Node.js $([[ $node_version == "--lts" ]] && echo "LTS ")($node_version_remote) installed successfully."
+
+  nvm use $node_version &> /dev/null
+}

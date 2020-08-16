@@ -1,0 +1,56 @@
+#! /usr/bin/env bash
+
+info=$(tput setaf 7)
+success=$(tput setaf 2)
+error=$(tput setaf 1)
+warning=$(tput setaf 3)
+clrf=$(tput sgr0)
+
+print_info() {
+  printf "${info}%s${clrf}\n" "$@"
+}
+
+print_success() {
+  printf "${success}%s${clrf}\n" "$@"
+}
+
+print_error() {
+  printf "${error}%s${clrf}\n" "$@"
+}
+
+print_warning() {
+  printf "${warning}%s${clrf}\n" "$@"
+}
+
+
+command_installed() {
+  if [[ $(command -v $1) ]]; then
+    return 0
+  fi
+  return 1
+}
+
+
+create_dir() {
+  mkdir -p "$1"
+  if [[ ! $? -gt 0 ]]; then print_success "Created directory: $1"; fi
+}
+
+
+create_link() {
+  ln -fs "$1" "$2"
+  if [[ ! $? -gt 0 ]]; then print_success "Created symlink: $2 --> $1"; fi
+}
+
+
+install_xcodeclt() {
+  print_info "Installing XCode command line tools..."
+  xcode-select --install &> /dev/null
+
+  if [[ $? -gt 0 ]]; then
+    print_error "An error occurred while installing XCode command line tools."
+    print_error "XCode command line tools is required to continue dotfiles setup."
+    return 1
+  fi
+  print_success "XCode command line tools installed successfully."
+}

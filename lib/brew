@@ -1,0 +1,18 @@
+#! /usr/bin/env bash
+
+install_homebrew() {
+  print_info "Installing Homebrew package manager..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" &>/dev/null
+
+  if [[ $? -gt 0 ]]; then
+    print_error "An error occurred while installing Homebrew."
+    print_error "Homebrew is required to continue dotfiles setup."
+    return 1
+  fi
+  print_success "Homebrew package manager installed successfully."
+}
+
+
+run_brew_bundle() {
+  brew bundle --no-lock --file="$1"
+}

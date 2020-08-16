@@ -1,0 +1,23 @@
+#! /usr/bin/env zsh
+
+# General
+alias cls="clear"
+
+# List aliases
+alias ls="ls -G"
+
+# Easier navigation (.., ..., ~ and -)
+alias ..="cd .."
+alias ...="cd ../.."
+alias ~="cd ~"
+alias -- -="cd - &>/dev/null"
+
+# Quick zsh config
+alias zshconfig="code $HOME/.zshrc"
+alias zshreload="source $HOME/.zshrc"
+
+# Flush DNS cache
+alias flushdns="dscacheutil -flushcache"
+
+# Copy my public key to the pasteboard
+alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | printf '=> Public key copied to pasteboard.\n'"

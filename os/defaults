@@ -1,0 +1,155 @@
+#! /usr/bin/env bash
+
+# Close System Preference to prevent settings override
+osascript -e 'tell application "System Preferences" to quit'
+
+# Request administrator privilages
+sudo -v
+
+
+# ####################################################################
+# General System UI/UX settings
+# ####################################################################
+
+# Set various computer names
+sudo scutil --set ComputerName "Braden's MacBook Pro"
+sudo scutil --set HostName "Bradens-MacBook-Pro"
+sudo scutil --set LocalHostName "Bradens-MacBook-Pro"
+
+# Show expanded save panel by default
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
+
+# Disable automatic capitalisation
+defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
+
+# Disable system-wide auto-correct
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+
+# Disable focus ring animation
+defaults write NSGlobalDomain NSUseAnimatedFocusRing -bool false
+
+# Disable screensaver
+defaults -currentHost write com.apple.screensaver idleTime -int 0
+
+
+# ####################################################################
+# Dock settings
+# ####################################################################
+
+# Set Dock height/icon size
+defaults write com.apple.dock tilesize -int 40
+
+# Lock Dock height/icon size
+defaults write com.apple.dock size-immutable -bool true
+
+# Enable indicator for hidden applications
+defaults write com.apple.dock showhidden -bool true
+
+# Disable recent apps section in Dock
+defaults write com.apple.dock show-recent -bool false
+
+# Disable rearranging desktop spaces based on most recent use
+defaults write com.apple.dock mru-spaces -bool false
+
+
+# ####################################################################
+# Trackpad, Mouse & Keyboard settings
+# ####################################################################
+
+# Disable typing suggesting on Touch Bar
+defaults write NSGlobalDomain NSAutomaticTextCompletionEnabled -bool false
+
+# Disable 'Shake to locate pointer'
+defaults write NSGlobalDomain CGDisableCursorLocationMagnification -bool true
+
+# Enable trackpad gesture for App Exposé
+defaults write com.apple.dock showAppExposeGestureEnabled -bool true
+
+
+# ####################################################################
+# Finder settings
+# ####################################################################
+
+# Set default location for new Finder windows
+defaults write com.apple.finder NewWindowTarget -string 'PfHm'
+defaults write com.apple.finder NewWindowTargetPath -string "file://$HOME"
+
+# Set default search scope (current folder)
+defaults write com.apple.finder FXDefaultSearchScope -string 'SCcf'
+
+# Disable creating .DS_Store files
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool false
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool false
+
+# Set default view for all Finder windows
+defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
+
+# Keep folders on top when sorting by name
+defaults write com.apple.finder _FXSortFoldersFirst -bool true
+
+# Keep folders on top on the Desktop
+defaults write com.apple.finder _FXSortFoldersFirstOnDesktop -bool true
+
+# Set visibility of system icons on Desktop
+defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
+defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
+defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
+defaults write com.apple.finder ShowMountedServersOnDesktop -bool false
+
+# Enable Desktop Stacks
+/usr/libexec/PListBuddy -c "SET :DesktopViewSettings:GroupBy Kind" $HOME/Library/Preferences/com.apple.finder.plist \
+  || /usr/libexec/PlistBuddy -c "Add :DesktopViewSettings:GroupBy string Kind" $HOME/Library/Preferences/com.apple.finder.plist
+
+
+# ####################################################################
+# iCloud settings
+# ####################################################################
+
+# Disable 'remove from iCloud' warning
+defaults write com.apple.finder FXEnableRemoveFromICloudDriveWarning -bool false
+
+# Disable 'Save to iCloud' by default
+defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+
+# Disable iCloud Drive sync for Desktop
+defaults write com.apple.finder FXICloudDriveDesktop -bool false
+
+# Disable iCloud Drive sync for Documents
+defaults write com.apple.finder FXICloudDriveDocuments -bool false
+
+
+# ####################################################################
+# Printer & Scanner settings
+# ####################################################################
+
+# Show expanded print panel by default
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
+
+# Automatically close printer app on print job completion
+defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
+
+
+# ####################################################################
+# Miscellaneous settings
+# ####################################################################
+
+# Enable chime on system start-up
+sudo nvram StartupMute=%00
+
+# Show battery percentage in menu bar
+defaults write com.apple.menuextra.battery ShowPercent -string "YES"
+
+
+
+# Restart affected apps & services
+apps=(
+  "Dock" \
+  "Finder" \
+  "SystemUIServer"
+)
+
+for app in $apps; do
+  killall "$app" &>/dev/null
+done

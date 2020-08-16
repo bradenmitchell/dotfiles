@@ -1,0 +1,49 @@
+# Global gitignore settings
+
+# General OS generated files
+._*
+.AppleDouble
+.com.apple.timemachine.donotpresent
+.DocumentRevisions-V100
+.DS_Store
+.DS_Store?
+.fseventsd
+.LSOverride
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+
+
+# Packages
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+
+# Compiled source
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+.apdisk
+Network Trash Folder
+Temporary Items

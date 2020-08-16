@@ -1,0 +1,8 @@
+#! /usr/bin/env bash
+
+setup_os_preferences() {
+  print_info "" "Setting up macOS preferences..."
+  source $DOTFILES_DIR/os/defaults
+
+  print_success "macOS preferences setup successfully."
+}

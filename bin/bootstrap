@@ -1,0 +1,128 @@
+#! /usr/bin/env bash
+
+DOTFILES_DIR="$HOME/.dotfiles"
+DOTFILES_GIT_REMOTE="https://github.com/bradenmitchell/dotfiles.git"
+DOTFILES_TARBALL_URL="https://github.com/bradenmitchell/dotfiles/tarball/master"
+
+# Request administrator privilages upfront
+sudo -v
+
+# Check for dotfiles; download if required
+if [[ ! -d $DOTFILES_DIR ]]; then
+  printf "$(tput setaf 7)Downloading dotfiles to $DOTFILES_DIR...$(tput sgr0)\n"
+  mkdir -p $DOTFILES_DIR
+  curl -fsSLo $HOME/dotfiles.tar $DOTFILES_TARBALL_URL
+  tar -xf $HOME/dotfiles.tar --strip-components 1 -C $DOTFILES_DIR
+  rm -rf $HOME/dotfiles.tar
+fi
+
+
+# Change into dotfiles directory
+cd $DOTFILES_DIR &> /dev/null
+if [[ $? -gt 0 ]]; then
+  printf "$(tput setaf 1)Unable to locate dotflies directory.$(tput sgr0)\n"
+  return 1
+fi
+printf "$(tput setaf 7)Using dotfiles at $DOTFILES_DIR.$(tput sgr0)\n"
+
+
+# Source additional scripts from lib
+for file in $(ls ./lib); do
+  source ./lib/$file
+done
+
+
+# Check if git repo; setup remote tracking if required
+if ! $(git rev-parse --is-inside-work-tree &> /dev/null); then
+  print_info "" "Initialising git repository for remote tracking..."
+  git init -q
+  git remote add origin $DOTFILES_GIT_REMOTE
+  git fetch -q origin master 
+  git reset -q --hard FETCH_HEAD
+  git clean -fd
+fi
+
+
+# Check for XCode Command Line Tools; install if required
+print_info "" "Checking for XCode command line tools..."
+if ! command_installed gcc; then
+  print_warning "XCode command line tools required."
+  install_xcodeclt
+  if [[ $? -gt 0 ]]; then
+    return 1
+  fi
+else
+  print_success "XCode command line tools installed."
+fi
+
+
+# Check for Homebrew; install if required
+print_info "" "Checking for Homebrew package manager..."
+if ! command_installed brew; then
+  print_warning "Homebrew package manager required."
+  install_homebrew
+
+  if [[ $? -gt 0 ]]; then
+    return 1
+  fi
+else
+  print_success "Homebrew package manager installed."
+fi
+
+
+# Check for Node Version Manager; install if required
+print_info "" "Checking for Node version manager..."
+if ! command_installed nvm; then
+  print_info "Node version manager not installed."
+  install_nvm
+
+  if [[ $? -gt 0 ]]; then
+    print_warning "Continuing dotfiles setup without Node version manager."
+  fi
+else
+  print_success "Node version manager installed."
+fi
+
+
+# Setup Home folder structure
+print_info ""
+create_dir "$HOME/Projects"
+create_dir "$HOME/.config/git"
+create_link "$DOTFILES_DIR/git/gitconfig" "$HOME/.config/git/config"
+create_link "$DOTFILES_DIR/git/gitignore" "$HOME/.config/git/ignore"
+create_link "$DOTFILES_DIR/zsh/zshrc"     "$HOME/zshrc"
+touch $HOME/.hushlogin
+
+
+# Temporarily disable homebrew auto update
+HOMEBREW_AUTO_UPDATE_SECS=$((60 * 60 * 24))
+
+
+# Install packages via Homebrew
+print_info "" "Installing packages via Homebrew..."
+run_brew_bundle  "$DOTFILES_DIR/brew/Brewfile-packages"
+
+
+# Install apps via Homebrew
+print_info "" "Installing apps via Homebrew..."
+run_brew_bundle "$DOTFILES_DIR/brew/Brewfile-apps"
+
+
+# Install fonts via Homebrew
+print_info "" "Installing fonts via Homebrew..."
+run_brew_bundle "$DOTFILES_DIR/brew/Brewfile-fonts"
+
+
+# Run brew clean-up
+brew cleanup &>/dev/null
+
+
+# Install node.js via nvm
+install_node
+
+
+# Run os defaults
+setup_os_preferences
+
+
+print_success "" "Dotfiles setup complete."

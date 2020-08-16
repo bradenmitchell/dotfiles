@@ -1,0 +1,21 @@
+# Brewfile for managing Homebrew packages, formula, etc.
+
+# Taps
+tap 'homebrew/core'
+tap 'romkatv/powerlevel10k'
+
+# Updates to macOS binaries
+brew 'bash'
+brew 'coreutils'
+brew 'git'
+brew 'zsh'
+
+# Binaries to be installed
+brew 'mas'
+brew 'powerlevel10k'
+brew 'pyenv'
+brew 'svn'
+brew 'tree'
+brew 'xz'
+brew 'zsh-autosuggestions'
+brew 'zsh-syntax-highlighting'
